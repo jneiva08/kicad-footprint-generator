@@ -30,35 +30,37 @@ from KicadModTree import *
 sys.path.append(os.path.join(sys.path[0], "..", "..", "tools"))  # load parent path of tools
 from footprint_text_fields import addTextFields
 
-series = "Micro-Fit_3.0"
-series_long = 'Micro-Fit 3.0 Connector System'
+series = "Milli-Grid"
+series_long = 'Milli-Grid Connector System'
 manufacturer = 'Molex'
-orientation = 'H'
+orientation = 'V'
 number_of_rows = 2
-datasheet = 'https://www.molex.com/pdm_docs/sd/430450200_sd.pdf'
+datasheet = 'https://www.molex.com/pdm_docs/sd/878310419_sd.pdf'
 
 #Molex part number
 #n = number of circuits per row
-part_code = "43045-{n:02}00"
+part_code = "87831-{n:02}00"
 
 alternative_codes = [
-"43045-{n:02}01",
-"43045-{n:02}02"
+"87831-{n:02}19",
+"87831-{n:02}20",
+"87831-{n:02}21",
+"87831-{n:02}36"
 ]
 
-pins_per_row_range = range(1,13)
-pitch = 3.0
-drill = 1.0
-peg_drill = 3.0
-pad_to_pad_clearance = 1.5 # Voltage rating is up to 600V (http://www.molex.com/pdm_docs/ps/PS-43045.pdf)
+pins_per_row_range = range(4,50,2)
+pitch = 2.0
+drill = 0.72
+peg_drill = .72
+pad_to_pad_clearance = 0.9 # Voltage rating is up to 125V (https://www.molex.com/pdm_docs/ps/PS-87831-027-001.pdf)
 
 pad_size = [pitch - pad_to_pad_clearance, pitch - pad_to_pad_clearance]
 
 def generate_one_footprint(pins, configuration):
     pins_per_row = pins
 
-    mpn = part_code.format(n=pins*2)
-    alt_mpn = [code.format(n=pins*2) for code in alternative_codes]
+    mpn = part_code.format(n=pins)
+    alt_mpn = [code.format(n=pins) for code in alternative_codes]
 
     # handle arguments
     orientation_str = configuration['orientation_options'][orientation]
