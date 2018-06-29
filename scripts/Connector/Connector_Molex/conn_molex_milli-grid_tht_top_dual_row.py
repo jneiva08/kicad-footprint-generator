@@ -48,19 +48,19 @@ alternative_codes = [
 "87831-{n:02}36"
 ]
 
-pins_per_row_range = range(4,50,2)
+pins_per_row_range = range(2,26)
 pitch = 2.0
-drill = 0.72
-peg_drill = .72
-pad_to_pad_clearance = 0.9 # Voltage rating is up to 125V (https://www.molex.com/pdm_docs/ps/PS-87831-027-001.pdf)
+drill = 0.9
+peg_drill = .9
+pad_to_pad_clearance = .9 # Voltage rating is up to 125V (https://www.molex.com/pdm_docs/ps/PS-87831-027-001.pdf)
 
 pad_size = [pitch - pad_to_pad_clearance, pitch - pad_to_pad_clearance]
 
 def generate_one_footprint(pins, configuration):
     pins_per_row = pins
 
-    mpn = part_code.format(n=pins)
-    alt_mpn = [code.format(n=pins) for code in alternative_codes]
+    mpn = part_code.format(n=pins*2)
+    alt_mpn = [code.format(n=pins*2) for code in alternative_codes]
 
     # handle arguments
     orientation_str = configuration['orientation_options'][orientation]
@@ -81,7 +81,7 @@ def generate_one_footprint(pins, configuration):
 
     #Puts first pin on 0,0 and second row 0, pitch
     pad_row_1_y = 0
-    pad_row_2_y = pad_row_1_y + pitch
+    pad_row_2_y = pad_row_1_y - pitch
     pad1_x = 0
 
     C = 1.7 + pitch*(pins-3) #1º need be 4.7mm
@@ -121,11 +121,11 @@ def generate_one_footprint(pins, configuration):
     # Add pads
     #
     kicad_mod.append(PadArray(start=[pad1_x, pad_row_1_y], initial=1,
-        pincount=pins_per_row, increment=1,  x_spacing=pitch, size=pad_size,
+        pincount=pins_per_row, increment=2,  x_spacing=pitch, size=pad_size,
         type=Pad.TYPE_THT, shape=Pad.SHAPE_CIRCLE, layers=Pad.LAYERS_THT, drill=drill))
 
-    kicad_mod.append(PadArray(start=[pad1_x, pad_row_2_y], initial=pins_per_row+1,
-        pincount=pins_per_row, increment=1, x_spacing=pitch, size=pad_size,
+    kicad_mod.append(PadArray(start=[pad1_x, pad_row_2_y], initial=2,
+        pincount=pins_per_row, increment=2, x_spacing=pitch, size=pad_size,
         type=Pad.TYPE_THT, shape=Pad.SHAPE_CIRCLE, layers=Pad.LAYERS_THT, drill=drill))
 
     ######################## Fabrication Layer ###########################
