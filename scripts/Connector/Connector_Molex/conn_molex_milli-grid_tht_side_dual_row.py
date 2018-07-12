@@ -42,10 +42,12 @@ datasheet = 'https://www.molex.com/pdm_docs/sd/878330419_sd.pdf'
 part_code = "87833-{n:02}00"
 
 alternative_codes = [
-"87831-{n:02}19",
-"87831-{n:02}20",
-"87831-{n:02}21",
-"87831-{n:02}36"
+"87833-{n:02}19",
+"87833-{n:02}20",
+"87833-{n:02}21",
+"87833-{n:02}31",
+"87833-{n:02}32",
+"87833-{n:02}61",
 ]
 
 pins_per_row_range = range(2,26)
@@ -77,45 +79,21 @@ def generate_one_footprint(pins, configuration):
 
     ########################## Dimensions ##############################
     B = (pins_per_row-1)*pitch
-    A = B + 6.65
+    A = B + 4.65
+    C = B + 3
+    D = B + 2.85
 
     #Puts first pin on 0,0 and second row 0, pitch
     pad_row_1_y = 0
     pad_row_2_y = pad_row_1_y - pitch
     pad1_x = 0
 
-    C = 1.7 + pitch*(pins-3) #1º need be 4.7mm
-
     body_edge={
-        'left':-3.325-0.25,
-        'right':A-3.325+0.25,
-        'top': -8.92
+        'left':-2.325,
+        'right':A-2.325,
+        'top': -(pitch+6.4)
         }
-    body_edge['bottom'] = body_edge['top'] + 9.91
-
-    ############################# Pads ##################################
-    #
-    # Pegs
-    #
-    if pins_per_row == 1:
-        kicad_mod.append(Pad(at=[0, pad_row_1_y - 4.32], number="",
-            type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, size=peg_drill,
-            drill=peg_drill, layers=Pad.LAYERS_NPTH))
-    elif pins_per_row == 2:
-        kicad_mod.append(Pad(at=[pitch/2, pad_row_1_y - 4.32], number="",
-            type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, size=peg_drill,
-            drill=peg_drill, layers=Pad.LAYERS_NPTH))
-    elif pins_per_row == 3:
-        kicad_mod.append(Pad(at=[pitch, pad_row_1_y - 4.32], number="",
-            type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, size=peg_drill,
-            drill=peg_drill, layers=Pad.LAYERS_NPTH))
-    else:
-        kicad_mod.append(Pad(at=[pad1_x + 2.14, pad_row_1_y - 4.32], number="",
-            type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, size=peg_drill,
-            drill=peg_drill, layers=Pad.LAYERS_NPTH))
-        kicad_mod.append(Pad(at=[pad1_x + 2.14 + C, pad_row_1_y - 4.32], number="",
-            type=Pad.TYPE_NPTH, shape=Pad.SHAPE_CIRCLE, size=peg_drill,
-            drill=peg_drill, layers=Pad.LAYERS_NPTH))
+    body_edge['bottom'] = 0
 
     #
     # Add pads
@@ -135,8 +113,7 @@ def generate_one_footprint(pins, configuration):
         {'x': body_edge['left'] + 1, 'y': body_edge['top']},
         {'x': body_edge['right'] - 1, 'y': body_edge['top']},
         {'x': body_edge['right'], 'y': body_edge['top'] + 1},
-        {'x': body_edge['right'], 'y': body_edge['bottom']},
-        {'x': body_edge['left'], 'y': body_edge['bottom']}
+        {'x': body_edge['right'], 'y': body_edge['bottom']}
     ]
     kicad_mod.append(PolygoneLine(polygone=main_body_poly,
         width=configuration['fab_line_width'], layer="F.Fab"))
